@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-var buffer = make([]float32, 64) // Buffer size must be appropriate for your use case
+var buffer = make([]float32, 2048) // Buffer size must be appropriate for your use case
 
 func init() {
 	stream, err := initAudio()

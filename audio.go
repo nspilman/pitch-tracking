@@ -11,7 +11,7 @@ func initAudio() (*portaudio.Stream, error) {
 		return nil, err
 	}
 
-	// Open the default audio device with a buffer of size 64
+	// Open the default audio device with a buffer of size 2048
 	stream, err := portaudio.OpenDefaultStream(1, 0, 44100, len(buffer), &buffer)
 	if err != nil {
 		return nil, err
