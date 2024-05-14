@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"math"
 	"math/cmplx"
 
 	"gonum.org/v1/gonum/dsp/fourier"
@@ -36,15 +34,4 @@ func findDominantFrequency(coeff []complex128) float64 {
 	sampleRate := 44100 // Define as per your setup
 	// Calculate frequency
 	return float64(maxIdx) * float64(sampleRate) / float64(len(coeff))
-}
-
-func main() {
-	// Example usage with dummy data
-	input := make([]float32, 1024) // Dummy input data
-	for i := range input {
-		input[i] = float32(math.Sin(2 * math.Pi * float64(i) * 440 / 44100)) // Example: 440 Hz tone
-	}
-
-	pitch := processAudio(input)
-	fmt.Printf("Detected pitch: %f Hz\n", pitch)
 }

@@ -7,7 +7,7 @@ import (
 
 var buffer = make([]float32, 2048) // Buffer size must be appropriate for your use case
 
-func init() {
+func main() {
 	stream, err := initAudio()
 	if err != nil {
 		log.Fatalf("Error initializing audio: %v", err)
