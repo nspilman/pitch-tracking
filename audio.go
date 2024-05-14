@@ -5,7 +5,7 @@ import (
 )
 
 // initAudio initializes an audio stream to capture audio from the microphone.
-func initAudio() (*portaudio.Stream, error) {
+func initAudio(buffer []float32) (*portaudio.Stream, error) {
 	err := portaudio.Initialize()
 	if err != nil {
 		return nil, err
