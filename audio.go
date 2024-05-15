@@ -64,3 +64,30 @@ func initAudio(buffer []float32, deviceName Device) (*portaudio.Stream, error) {
 	}
 	return stream, nil
 }
+
+func initOutput(buffer []float32) (*portaudio.Stream, error) {
+	err := portaudio.Initialize()
+	if err != nil {
+		return nil, err
+	}
+	defaultOutput, err := portaudio.DefaultOutputDevice()
+	if err != nil {
+		return nil, err
+	}
+
+	streamParameters := portaudio.StreamParameters{
+		Output: portaudio.StreamDeviceParameters{
+			Device:   defaultOutput,
+			Channels: 1,
+			Latency:  defaultOutput.DefaultLowOutputLatency,
+		},
+		SampleRate:      44100,
+		FramesPerBuffer: len(buffer),
+	}
+
+	stream, err := portaudio.OpenStream(streamParameters, buffer)
+	if err != nil {
+		return nil, err
+	}
+	return stream, nil
+}
