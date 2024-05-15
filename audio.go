@@ -39,7 +39,6 @@ func initAudio(buffer []float32, deviceName Device) (*portaudio.Stream, error) {
 	if err != nil {
 		return nil, err
 	}
-	portaudio.DefaultInputDevice()
 	var device *portaudio.DeviceInfo
 	if deviceName != "" {
 		device, err = findDeviceByName(string(deviceName))
