@@ -7,8 +7,16 @@ import (
 
 var buffer = make([]float32, 2048) // Buffer size must be appropriate for your use case
 
+type Device string
+
+const (
+	BlackHole2ch  Device = "BlackHole 2ch"
+	DefaultDevice Device = ""
+)
+
 func main() {
-	stream, err := initAudio(buffer)
+
+	stream, err := initAudio(buffer, BlackHole2ch)
 	if err != nil {
 		log.Fatalf("Error initializing audio: %v", err)
 	}
