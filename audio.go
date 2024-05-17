@@ -8,6 +8,9 @@ import (
 
 func showDevices() {
 	err := portaudio.Initialize()
+	if err != nil {
+		fmt.Println(err)
+	}
 	devices, err := portaudio.Devices()
 	if err != nil {
 		fmt.Println(err)
@@ -33,26 +36,27 @@ func findDeviceByName(name string) (*portaudio.DeviceInfo, error) {
 	return nil, fmt.Errorf("device %s not found", name)
 }
 
+
 // initAudio initializes an audio stream to capture audio from the microphone.
 func initAudio(buffer []float32, deviceName Device) (*portaudio.Stream, error) {
 	err := portaudio.Initialize()
 	if err != nil {
 		return nil, err
 	}
-	var device *portaudio.DeviceInfo
+	var inputDevice *portaudio.DeviceInfo
 	if deviceName != "" {
-		device, err = findDeviceByName(string(deviceName))
+		inputDevice, err = findDeviceByName(string(deviceName))
 	} else {
-		device, err = portaudio.DefaultInputDevice()
+		inputDevice, err = portaudio.DefaultInputDevice()
 	}
 	if err != nil {
 		return nil, err
 	}
 	streamParameters := portaudio.StreamParameters{
 		Input: portaudio.StreamDeviceParameters{
-			Device:   device,
+			Device:   inputDevice,
 			Channels: 1,
-			Latency:  device.DefaultLowInputLatency,
+			Latency:  inputDevice.DefaultLowInputLatency,
 		},
 		SampleRate:      44100,
 		FramesPerBuffer: len(buffer),
@@ -65,21 +69,28 @@ func initAudio(buffer []float32, deviceName Device) (*portaudio.Stream, error) {
 	return stream, nil
 }
 
-func initOutput(buffer []float32) (*portaudio.Stream, error) {
+
+func initOutput(buffer []float32, deviceName Device) (*portaudio.Stream, error) {
 	err := portaudio.Initialize()
 	if err != nil {
 		return nil, err
 	}
-	defaultOutput, err := portaudio.DefaultOutputDevice()
+	var outputDevice *portaudio.DeviceInfo
+	if deviceName != "" {
+		outputDevice, err = findDeviceByName(string(deviceName))
+	} else {
+		outputDevice, err = portaudio.DefaultInputDevice()
+	}
+
 	if err != nil {
 		return nil, err
 	}
 
 	streamParameters := portaudio.StreamParameters{
 		Output: portaudio.StreamDeviceParameters{
-			Device:   defaultOutput,
+			Device:   outputDevice,
 			Channels: 1,
-			Latency:  defaultOutput.DefaultLowOutputLatency,
+			Latency:  outputDevice.DefaultLowOutputLatency,
 		},
 		SampleRate:      44100,
 		FramesPerBuffer: len(buffer),
