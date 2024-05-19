@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/cmplx"
+
 	"gonum.org/v1/gonum/dsp/window"
 
 	"gonum.org/v1/gonum/dsp/fourier"
@@ -23,18 +24,18 @@ func processAudio(in []float32) float64 {
 	coeff := fft.Coefficients(nil, data)
 
 	// Find dominant frequency
-	return findDominantFrequency(coeff)
+	return findDominantFrequency(coeff, len(data))
 }
 
-func findDominantFrequency(coeff []complex128) float64 {
+func findDominantFrequency(coeff []complex128, bufferSize int) float64 {
 	maxVal := 0.0
 	var maxIdx int
-	for i := 0; i < len(coeff)/2; i++ { // Only consider the first half of the coefficients
+	for i := 0; i < len(coeff); i++ { // Only consider the first half of the coefficients
 		if abs := cmplx.Abs(coeff[i]); abs > maxVal {
 			maxVal = abs
 			maxIdx = i
 		}
 	}
 	// Calculate frequency
-	return float64(maxIdx) * float64(sampleRate) / float64(len(coeff))
+	return float64(maxIdx) * float64(sampleRate) / float64(bufferSize)
 }

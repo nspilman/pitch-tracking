@@ -92,7 +92,7 @@ func initOutput(buffer []float32, deviceName Device) (*portaudio.Stream, error) 
 			Channels: 1,
 			Latency:  outputDevice.DefaultLowOutputLatency,
 		},
-		SampleRate:      44100,
+		SampleRate:      sampleRate,
 		FramesPerBuffer: len(buffer),
 	}
 
